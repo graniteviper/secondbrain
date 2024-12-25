@@ -8,9 +8,9 @@ type buttonProps = {
   path?: string;
   title: string;
   className?: string;
-  url?: string,
-  username?:string,
-  password?:string,
+  url?: string;
+  username?: string;
+  password?: string;
 };
 
 const variants = {
@@ -18,18 +18,31 @@ const variants = {
   light: "border-black hover:text-gray-100 hover:bg-black",
 };
 
-const Button = ({ variant, path, title, className,url,username,password}: buttonProps) => {
+const Button = ({
+  variant,
+  path,
+  title,
+  className,
+  url,
+  username,
+  password,
+}: buttonProps) => {
   const router = useRouter();
   return (
     <button
-      onClick={async ()=>{
-        if(url && path){
-          const response = await axios.post(url,{
-            username:username,
-            password: password
-          })
-
+      onClick={async () => {
+        if (url && path) {
+          const response = await axios.post(url, {
+            username: username,
+            password: password,
+          });
           console.log(response);
+          if (response.data.status == 200) {
+            router.push(path);
+          }
+        } else if (path) {
+          router.push(path);
+        } else {
         }
       }}
       className={`font-light px-4 py-1 rounded-lg border-2 transition-all duration-300 ${variants[variant]} ${className}`}

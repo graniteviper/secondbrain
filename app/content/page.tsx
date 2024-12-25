@@ -2,7 +2,9 @@ import React from 'react'
 
 const content = () => {
   return (
-    <div>content</div>
+    <div className='h-screen w-screen'>
+      
+    </div>
   )
 }
 
