@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken"
 import { cookies } from "next/headers";
 import { PrismaClient } from "@prisma/client";
+import { title } from "process";
 
 const prisma = new PrismaClient();
 export async function POST(req: NextRequest, res: NextResponse){
@@ -52,7 +53,6 @@ export async function POST(req: NextRequest, res: NextResponse){
         })
     };
     return NextResponse.json({
-        cardContent,
         message:"Content added."
     });
 }
@@ -88,14 +88,63 @@ export async function DELETE(req: NextRequest, res: NextResponse){
 }
 
 export async function PUT(req: NextRequest, res: NextResponse){
-
+    const body = await req.json();
+    const newTitle = body.title;
+    const newDesc = body.desc;
+    const contentId = body.contentId;
+    const cookieStore = await cookies();
+    if(!newTitle){
+        return NextResponse.json({
+            message: "Title is required."
+        })
+    };
+    const uid = cookieStore.get('uid');
+    const userObject = uidToUsername(uid!.value);
+    //@ts-ignore
+    if(!userObject.username){
+        return NextResponse.json({
+            message: "User is not authenticated."
+        })
+    };
+    const updateContent = await prisma.content.update({
+        where:{
+            id: contentId
+        },
+        data:{
+            title: newTitle,
+            description: newDesc
+        }
+    });
+    if(!updateContent){
+        return NextResponse.json({
+            message: "Content not updated due to some error."
+        })
+    }
+    return NextResponse.json({
+        message: "Content updated Successfully."
+    });
 }
 
 export async function GET(req: NextRequest, res: NextResponse){
-
+    const cookieStore = await cookies();
+    const uid = cookieStore.get('uid');
+    const userObject = uidToUsername(uid!.value);
+    //@ts-ignore
+    const username = userObject.username;
+    if(!username){
+        return NextResponse.json({
+            message: "User is not authenticated."
+        })
+    }
+    const contents = await prisma.content.findMany({
+        where:{
+            username: username,
+        }
+    });
+    return NextResponse.json({
+        contents
+    })
 }
-
-
 
 function uidToUsername(uid: string){
     const decodedToken = jwt.verify(uid,process.env.JWT_SECRET!);
