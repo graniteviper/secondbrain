@@ -1,23 +1,50 @@
 "use client";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import React from "react";
+import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "../lib/utils";
+import { Slot } from "@radix-ui/react-slot";
 
-type buttonProps = {
-  variant: "light" | "dark";
-  path?: string;
-  title: string;
-  className?: string;
-  url?: string;
-  username?: string;
-  password?: string;
-};
+const buttonVariants = cva(
+  "px-5 py-2 transition-all duration-300 cursor-pointer",
+  {
+    variants: {
+      variant: {
+        dark: "border-gray-100 hover:text-black hover:bg-gray-100",
+        light: "border-black hover:text-gray-100 hover:bg-black",
+        delete: "border-red-600 hover:text-gray-100 hover:bg-red-600",
+        blue: "border-blue-600 hover:text-gray-100 hover:bg-blue-600",
+      },
+      size: {
+        default: "h-10 px-4 py-2",
+        sm: "h-9 rounded-lg px-3",
+        lg: "h-11 rounded-lg px-8",
+      },
+    },
+    defaultVariants: {
+      variant: "light",
+      size: "default",
+    },
+  }
+);
 
-const variants = {
-  dark: "border-gray-100 hover:text-black hover:bg-gray-100",
-  light: "border-black hover:text-gray-100 hover:bg-black",
-};
+export interface buttonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>,VariantProps<typeof buttonVariants>{
+  asChild?: boolean
+}
 
+const Button = React.forwardRef<HTMLButtonElement,buttonProps>(({className,variant,size,asChild = false, ...props},ref)=>{
+  const Comp = asChild ? Slot : "button"
+  return (
+    <Comp
+      className={cn(buttonVariants({ variant, size, className }))}
+      ref={ref}
+      {...props}
+    />
+  )
+})
+
+export {Button, buttonVariants}
+
+/*
 const Button = ({
   variant,
   path,
@@ -26,6 +53,7 @@ const Button = ({
   url,
   username,
   password,
+  enterContent
 }: buttonProps) => {
   const router = useRouter();
   return (
@@ -42,7 +70,8 @@ const Button = ({
           }
         } else if (path) {
           router.push(path);
-        } else {
+        } else if(enterContent){
+
         }
       }}
       className={`font-light px-4 py-1 rounded-lg border-2 transition-all duration-300 ${variants[variant]} ${className}`}
@@ -53,3 +82,4 @@ const Button = ({
 };
 
 export default Button;
+*/
