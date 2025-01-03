@@ -8,13 +8,42 @@ const prisma = new PrismaClient();
 
 export async function POST(req: NextRequest,res:NextResponse) {
     const cookieStore = await cookies();
-    const uid = cookieStore.get('uid')
-    const decoded = jwt.verify(uid!.value,process.env.JWT_SECRET!);
-    if(decoded){
+    const body = await req.json();
+    const username = body.username;
+    const password = body.password;
+    if(!username || !password){
         return NextResponse.json({
-            message:"User Verified!"
+            message: "Credentials are required."
+        })
+    };
+
+    const user = await prisma.user.findFirst({
+        where: { username: username },
+    });
+
+    if(!user){
+        return NextResponse.json({
+            message: "User does not exist."
         })
     }
+
+    const match = await bcrypt.compare(password,user!.password)
+    if(!match){
+        return NextResponse.json({
+            message: "Password is invalid"
+        })
+    };
+    const token = jwt.sign({username:username},process.env.JWT_SECRET!,{expiresIn: "24h"})
+    cookieStore.set({
+        name: "uid",
+        value: token,
+        httpOnly: true,
+        path: "/",
+    });
+    return NextResponse.json({
+        message: "User logged in.",
+        username: user?.username
+    })
 }
 
 
@@ -22,48 +51,5 @@ export async function POST(req: NextRequest,res:NextResponse) {
 
 
 
-
-
-
-
-
-
-/*export async function POST(req:NextRequest,res:NextResponse){
-    const response = await req.json();
-    try {
-        const username = response.username
-        const password = response.password
-        if(!username || !password){
-            return NextResponse.json({
-                message: "Both Username and password are expected."
-            })
-        } else{
-
-            const user = await prisma.user.findFirst({
-                where:{
-                    username: username
-                }
-            })
-
-            if(user){
-                const response = await bcrypt.compare(password,user!.password)
-                // console.log(response);
-                if(response){
-                    return NextResponse.json({
-                        message: "User Verified.",
-                        status: 200
-                    })
-                }
-            } else{
-                return NextResponse.json({
-                    status: 400,
-                    message: "User Does not Exist."
-                })
-            }
-        }
-    } catch (error) {
-        return NextResponse.json({
-            message: "Unexpected error Occurred"
-        })
-    }
-}*/
+// const uid = cookieStore.get('uid')
+// const decoded = jwt.verify(uid!.value,process.env.JWT_SECRET!);

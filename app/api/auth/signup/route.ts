@@ -15,6 +15,17 @@ export async function POST(req: NextRequest, res: NextResponse) {
       message: "Username and Password are expected.",
     });
   }
+
+  const existingUser = await prisma.user.findFirst({
+    where:{username: username}
+  })
+
+  if(existingUser){
+    return NextResponse.json({
+      message: "User already exists."
+    })
+  }
+
   const hash = await bcrypt.hash(password, 10);
   const user = await prisma.user.create({
     data: {
