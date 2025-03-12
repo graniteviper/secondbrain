@@ -13,6 +13,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
   if (!username || !password) {
     return NextResponse.json({
       message: "Username and Password are expected.",
+      status: 400
     });
   }
 
@@ -22,7 +23,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
   if(existingUser){
     return NextResponse.json({
-      message: "User already exists."
+      message: "User already exists.",
+      status: 400
     })
   }
 
@@ -36,6 +38,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
   if (!user) {
     return NextResponse.json({
       message: "Error while creating User",
+      status: 400
     });
   }
   const token = jwt.sign({ username: body.username }, process.env.JWT_SECRET!, {
@@ -49,5 +52,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
   });
   return NextResponse.json({
     message: "User Created",
+    status: 200
   });
 }

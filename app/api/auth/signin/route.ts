@@ -13,7 +13,8 @@ export async function POST(req: NextRequest,res:NextResponse) {
     const password = body.password;
     if(!username || !password){
         return NextResponse.json({
-            message: "Credentials are required."
+            message: "Credentials are required.",
+            status: 400
         })
     };
 
@@ -23,14 +24,16 @@ export async function POST(req: NextRequest,res:NextResponse) {
 
     if(!user){
         return NextResponse.json({
-            message: "User does not exist."
+            message: "User does not exist.",
+            status: 400
         })
     }
 
     const match = await bcrypt.compare(password,user!.password)
     if(!match){
         return NextResponse.json({
-            message: "Password is invalid"
+            message: "Password is invalid",
+            status: 400
         })
     };
     const token = jwt.sign({username:username},process.env.JWT_SECRET!,{expiresIn: "24h"})
@@ -42,7 +45,7 @@ export async function POST(req: NextRequest,res:NextResponse) {
     });
     return NextResponse.json({
         message: "User logged in.",
-        username: user?.username
+        status: 200
     })
 }
 
