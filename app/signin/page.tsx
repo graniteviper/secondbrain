@@ -85,7 +85,7 @@ const Signin = () => {
           {isLoading ? "Signing In..." : "Sign In"}
         </Button>
         <p className="text-sm text-gray-400">
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <button
             onClick={() => router.push("/signup")}
             className="text-purple-400 hover:text-purple-300 transition-colors"

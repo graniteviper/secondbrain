@@ -81,7 +81,7 @@ const ContentPage = () => {
       });
 
       if (response.status === 200) {
-        console.log(response);
+        // console.log(response);
         
         // Add the new item to the array to avoid refetching
         const newItem = {
