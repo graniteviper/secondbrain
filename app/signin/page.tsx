@@ -20,7 +20,7 @@ const Signin = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:3000/api/auth/signin", {
+      const response = await axios.post("https://secondbrain-j1dm.vercel.app/api/auth/signin", {
         username: username,
         password: password,
       });
@@ -30,7 +30,7 @@ const Signin = () => {
       if (response.data.status === 200) {
         toast.success("Sign in successful!");
         setTimeout(() => {
-          router.push("http://localhost:3000/content");
+          router.push("https://secondbrain-j1dm.vercel.app/content");
         }, 1500);
       } else {
         toast.error("Sign in failed. Please check your credentials.");

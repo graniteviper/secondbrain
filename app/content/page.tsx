@@ -75,7 +75,7 @@ const ContentPage = () => {
 
     setIsSubmitting(true);
     try {
-      const response = await axios.post("http://localhost:3000/api/content", {
+      const response = await axios.post("https://secondbrain-j1dm.vercel.app/content", {
         title: newTitle.trim(),
         desc: newDescription.trim(),
       });
@@ -128,7 +128,7 @@ const ContentPage = () => {
     try {
       // ===== BACKEND CONNECTION CODE GOES HERE =====
       // Example of what the API call might look like:
-      await axios.put("http://localhost:3000/api/content", {
+      await axios.put("https://secondbrain-j1dm.vercel.app/content", {
         contentId: editingContentId,
         title: editTitle.trim(),
         desc: editDescription.trim(),
@@ -158,7 +158,7 @@ const ContentPage = () => {
   async function fetchContent() {
     setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost:3000/api/content");
+      const response = await axios.get("https://secondbrain-j1dm.vercel.app/content");
       // console.log(response);
       
       setContentItems(response.data.contents || []);
@@ -187,7 +187,7 @@ const ContentPage = () => {
 
   const deletetodo = async (contentId: string) => {
     try {
-      await axios.delete("http://localhost:3000/api/content", {
+      await axios.delete("https://secondbrain-j1dm.vercel.app/content", {
         data: {
           contentId
         }
