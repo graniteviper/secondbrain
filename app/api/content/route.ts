@@ -78,11 +78,13 @@ export async function PUT(req: NextRequest) {
         // console.log(title);
         if (!title) throw new Error("Title is required.");
         const username = await authenticateUser();
-        await prisma.content.update({
-            where: { id: cardId },
-            data: { title, description: desc }
-        });
-        return respond("Content updated successfully.");
+        if(username){
+            await prisma.content.update({
+                where: { id: cardId },
+                data: { title, description: desc }
+            });
+            return respond("Content updated successfully.");
+        }
     } catch (error) {
         if (error instanceof Error) {
             return respond(error.message, 400);

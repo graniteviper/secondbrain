@@ -128,7 +128,7 @@ const ContentPage = () => {
     try {
       // ===== BACKEND CONNECTION CODE GOES HERE =====
       // Example of what the API call might look like:
-      const response = await axios.put("http://localhost:3000/api/content", {
+      await axios.put("http://localhost:3000/api/content", {
         contentId: editingContentId,
         title: editTitle.trim(),
         desc: editDescription.trim(),
@@ -187,7 +187,7 @@ const ContentPage = () => {
 
   const deletetodo = async (contentId: string) => {
     try {
-      const res = await axios.delete("http://localhost:3000/api/content", {
+      await axios.delete("http://localhost:3000/api/content", {
         data: {
           contentId
         }
