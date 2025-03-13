@@ -81,9 +81,11 @@ const ContentPage = () => {
       });
 
       if (response.status === 200) {
+        console.log(response);
+        
         // Add the new item to the array to avoid refetching
         const newItem = {
-          id: response.data.id || Date.now().toString(),
+          id: response.data.id,
           username: "current_user", // You might want to get this from a context or session
           title: newTitle,
           description: newDescription,
@@ -231,7 +233,7 @@ const ContentPage = () => {
             size="default"
             onClick={() => setIsAddModalOpen(true)}
             leftIcon={<Plus size={16} />}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white border-none"
+            className="bg-indigo-600 hover:bg-indigo-700 text-white border-none ml-4"
           >
             Add New
           </Button>

@@ -27,8 +27,8 @@ function uidToUsername(uid: string) {
 }
 
 // Helper function to handle response messages
-function respond(message: string, statusCode = 200) {
-    return NextResponse.json({ message }, { status: statusCode });
+function respond(message: string, statusCode = 200, id: number | undefined = undefined) {
+    return NextResponse.json({ id,message }, { status: statusCode });
 }
 
 // POST - Add Content
@@ -39,8 +39,8 @@ export async function POST(req: NextRequest) {
         const cardContent = await prisma.content.create({
             data: { title, description: desc, username }
         });
-        console.log(cardContent);
-        return respond("Content added successfully.");
+        // console.log(cardContent);
+        return respond("Content added successfully.",200,cardContent.id);
     } catch (error) {
         if (error instanceof Error) {
             return respond(error.message, 400);
@@ -54,7 +54,7 @@ export async function DELETE(req: NextRequest) {
     try {
         let { contentId } = await req.json();
         contentId = parseInt(contentId);
-        console.log(contentId);
+        // console.log(contentId);
         if (!contentId) throw new Error("Content ID is required.");
         const username = await authenticateUser();
         await prisma.content.delete({

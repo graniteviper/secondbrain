@@ -44,16 +44,25 @@ const Signin = () => {
   }
 
   return (
-    <div className="flex items-center justify-center h-screen w-screen bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500">
-      <Toaster position="top-center" toastOptions={{ duration: 3000 }} />
-      <div className="flex flex-col items-center justify-center gap-6 bg-white p-8 rounded-lg shadow-lg">
-        <h2 className="text-4xl font-semibold text-gray-800">Sign In Here!</h2>
+    <div className="flex items-center justify-center h-screen w-screen bg-gradient-to-r from-gray-900 via-gray-800 to-black">
+      <Toaster 
+        position="top-center" 
+        toastOptions={{ 
+          duration: 3000,
+          style: {
+            background: '#333',
+            color: '#fff',
+          },
+        }} 
+      />
+      <div className="flex flex-col items-center justify-center gap-6 bg-gray-800 p-8 rounded-lg shadow-2xl border border-gray-700 w-full max-w-md">
+        <h2 className="text-3xl font-light text-white">Sign In</h2>
         <div className="w-full">
           <input
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none text-white placeholder-gray-400"
             placeholder="Username"
           />
         </div>
@@ -62,7 +71,7 @@ const Signin = () => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none text-white placeholder-gray-400"
             placeholder="Password"
           />
         </div>
@@ -71,15 +80,15 @@ const Signin = () => {
           size="sm"
           onClick={submit}
           disabled={isLoading}
-          className="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-all disabled:bg-blue-300"
+          className="w-full bg-purple-600 text-white px-6 py-3 rounded-md hover:bg-purple-700 transition-all disabled:bg-purple-800 disabled:opacity-50"
         >
           {isLoading ? "Signing In..." : "Sign In"}
         </Button>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-gray-400">
           Don't have an account?{" "}
           <button
             onClick={() => router.push("/signup")}
-            className="text-blue-600 hover:underline"
+            className="text-purple-400 hover:text-purple-300 transition-colors"
           >
             Sign Up
           </button>
